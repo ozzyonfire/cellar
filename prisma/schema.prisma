@@ -1,0 +1,80 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+/// Schema for a winemakers log
+/// Store information on batches of wine, cider, beer, etc.
+
+model User {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String        @unique
+  batches     Batch[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ingredients Ingredients[]
+}
+
+model Batch {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  user           User          @relation(fields: [userId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  userId         String        @db.ObjectId
+  volume         Float
+  startDate      DateTime      @default(now())
+  endDate        DateTime
+  additions      Addition[]
+  readings       Reading[]
+  ingredients    Ingredients[] @relation(fields: [ingredientsIds], references: [id])
+  ingredientsIds String[]      @db.ObjectId
+}
+
+model Addition {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  batch     Batch    @relation(fields: [batchId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  batchId   String   @db.ObjectId
+  volume    Float?
+  weight    Float?
+  date      DateTime
+  notes     String
+}
+
+model Reading {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  batch           Batch    @relation(fields: [batchId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  batchId         String   @db.ObjectId
+  specificGravity Float?
+  temperature     Float?
+  brix            Float?
+  pH              Float?
+  TA              Float?
+  SO2             Float?
+  date            DateTime
+  notes           String
+}
+
+model Ingredients {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  weight    Float?
+  volume    Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  batches   Batch[]  @relation(fields: [batchIds], references: [id])
+  batchIds  String[] @db.ObjectId
+}
