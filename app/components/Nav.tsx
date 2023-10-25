@@ -18,6 +18,7 @@ export function NavItem(props: {
 
 	const button = cva({
 		base: {
+			transition: 'all 75ms',
 			display: 'inline-flex',
 			alignItems: 'center',
 			px: 1,
@@ -27,42 +28,33 @@ export function NavItem(props: {
 			borderColor: 'transparent',
 			borderBottomWidth: 2,
 			color: 'gray.500',
+			_osDark: {
+				color: 'gray.300',
+			},
 			_hover: {
 				color: 'gray.700',
+				_osDark: {
+					color: 'gray.100',
+					borderColor: 'gray.700',
+				},
 				borderColor: 'gray.300',
 			}
 		},
 		variants: {
-			variant: {
-				primary: {
-					color: 'gray.500',
-					_hover: {
-						color: 'gray.700',
-						borderColor: 'gray.300',
-					}
-				},
-				secondary: {
-					color: 'gray.500',
-					_hover: {
-						color: 'gray.700',
-						borderColor: 'gray.300',
-					}
-				}
-			},
 			active: {
 				true: {
 					color: 'indigo.600',
 					borderColor: 'indigo.500',
 					_osDark: {
 						color: 'indigo.300',
-						borderColor: 'indigo.200',
+						borderColor: 'indigo.300',
 					},
 					_hover: {
 						color: 'indigo.700',
 						borderColor: 'indigo.700',
 						_osDark: {
-							color: 'indigo.500',
-							borderColor: 'indigo.500',
+							color: 'indigo.200',
+							borderColor: 'indigo.200',
 						},
 					}
 				}
@@ -86,7 +78,6 @@ export function NavItem(props: {
 			// 	}
 			// })}
 			className={button({
-				variant: 'primary',
 				active: active,
 			})}
 		>
@@ -147,14 +138,53 @@ export default function Nav(props: {
 							})}
 						</styled.div>
 					</styled.div>
-					<div className="hidden sm:ml-6 sm:flex sm:items-center">
+					{/* <div className="hidden sm:ml-6 sm:flex sm:items-center"> */}
+					<div className={css({
+						base: {
+							display: 'none',
+						},
+						sm: {
+							display: 'flex',
+							ml: 6,
+							alignItems: 'center',
+						}
+					})}
+					>
 						<AuthMenu />
 					</div>
-					<styled.div className="-mr-2 flex items-center sm:hidden">
-						<button className="bg-white p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-							<span className="sr-only">Open main menu</span>
+					<styled.div
+						mr={-2}
+						display={{
+							base: 'flex',
+							sm: 'none',
+						}} alignItems="center"
+					// className="-mr-2 flex items-center sm:hidden"
+					>
+						<button
+							// className="bg-white p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+							className={css({
+								bg: 'white',
+								p: 2,
+								rounded: 'md',
+								color: 'gray.400',
+								_hover: {
+									color: 'gray.500',
+								},
+								_focus: {
+									outline: 'none',
+									ring: 2,
+									ringOffset: 2,
+									ringColor: 'indigo.500',
+								},
+							})}
+						>
+							<span className={css({ srOnly: true })}>Open main menu</span>
 							<svg
-								className="h-6 w-6"
+								// className="h-6 w-6"
+								className={css({
+									h: 6,
+									w: 6,
+								})}
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
@@ -172,8 +202,8 @@ export default function Nav(props: {
 					</styled.div>
 				</styled.div>
 			</styled.div>
-
-			<div className="hidden sm:hidden">
+			{/* 
+			<styled.div hidden>
 				<div className="px-2 pt-2 pb-3 space-y-1">
 					<a
 						href="#"
@@ -196,7 +226,7 @@ export default function Nav(props: {
 						Reports
 					</a>
 				</div>
-			</div>
-		</styled.nav>
+			</styled.div> */}
+		</styled.nav >
 	)
 }

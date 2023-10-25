@@ -6,6 +6,7 @@ import { Batch } from '@prisma/client';
 import Modal from './components/Modal';
 import Button from './components/Button';
 import { styled } from '@/styled-system/jsx';
+import { css } from '@/styled-system/css';
 
 type BatchManagementPageProps = {
 	batches: Batch[];
@@ -38,13 +39,20 @@ const BatchManagementPage: React.FC<BatchManagementPageProps> = ({ batches = [] 
 				}}>
 					<div className="px-4 py-8 sm:px-0">
 						<div className="flex justify-between items-center mb-8">
-							<h1 className="text-3xl font-extrabold text-gray-900">Batch Management</h1>
-							<button
-								className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-								onClick={handleNewBatchClick}
+							<h1
+								// className="text-3xl font-extrabold text-gray-900"
+								className={css({
+									fontSize: "3xl",
+									fontWeight: 'extrabold',
+								})}
 							>
-								New Batch
-							</button>
+								Batch Management
+							</h1>
+							<Button
+								color="orange"
+								title='New Batch'
+								onClick={handleNewBatchClick}
+							/>
 						</div>
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 							{batches.map((batch) => (
@@ -69,7 +77,9 @@ const BatchManagementPage: React.FC<BatchManagementPageProps> = ({ batches = [] 
 							))}
 						</div>
 					</div>
-					<Button title="Hello" />
+					<Button className={css({
+						colorPalette: 'red',
+					})} title="Hello" />
 				</styled.div>
 			</styled.main>
 			<Modal open={showModal} onClose={handleModalClose} />

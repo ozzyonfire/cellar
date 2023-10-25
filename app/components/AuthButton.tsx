@@ -31,6 +31,7 @@ export default function AuthMenu() {
 							display: 'flex',
 							fontSize: 'sm',
 							rounded: 'full',
+							cursor: 'pointer',
 							_focus: {
 								outline: 'none',
 								ring: 2,
@@ -60,7 +61,25 @@ export default function AuthMenu() {
 
 				<div
 					ref={ref}
-					className={cn("hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-black ring-1 ring-black dark:ring-gray-800 ring-opacity-5", menuOpen && "block")}
+					// className={cn("hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-black ring-1 ring-black dark:ring-gray-800 ring-opacity-5", menuOpen && "block")}
+					className={css({
+						display: menuOpen ? 'block' : 'none',
+						transformOrigin: 'top right',
+						position: 'absolute',
+						right: 0,
+						mt: 2,
+						w: 48,
+						rounded: 'md',
+						shadow: 'lg',
+						py: 1,
+						bg: 'white',
+						_osDark: {
+							bg: 'black',
+							ring: 'gray.800',
+						},
+						ring: 1,
+						ringColor: 'black',
+					})}
 					role="menu"
 					aria-orientation="vertical"
 					aria-labelledby="user-menu"
