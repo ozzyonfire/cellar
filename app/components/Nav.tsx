@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import AuthMenu from "./AuthButton"
-
+import { styled } from "@/styled-system/jsx"
+import { css, cva } from "@/styled-system/css"
 export function NavItem(props: {
 	children: React.ReactNode
 	href?: string
@@ -15,10 +16,79 @@ export function NavItem(props: {
 
 	const classes = cn(baseStyles, buttonStyles, active && activeStyles);
 
+	const button = cva({
+		base: {
+			display: 'inline-flex',
+			alignItems: 'center',
+			px: 1,
+			pt: 1,
+			fontSize: 'sm',
+			fontWeight: 'medium',
+			borderColor: 'transparent',
+			borderBottomWidth: 2,
+			color: 'gray.500',
+			_hover: {
+				color: 'gray.700',
+				borderColor: 'gray.300',
+			}
+		},
+		variants: {
+			variant: {
+				primary: {
+					color: 'gray.500',
+					_hover: {
+						color: 'gray.700',
+						borderColor: 'gray.300',
+					}
+				},
+				secondary: {
+					color: 'gray.500',
+					_hover: {
+						color: 'gray.700',
+						borderColor: 'gray.300',
+					}
+				}
+			},
+			active: {
+				true: {
+					color: 'indigo.600',
+					borderColor: 'indigo.500',
+					_osDark: {
+						color: 'indigo.300',
+						borderColor: 'indigo.200',
+					},
+					_hover: {
+						color: 'indigo.700',
+						borderColor: 'indigo.700',
+						_osDark: {
+							color: 'indigo.500',
+							borderColor: 'indigo.500',
+						},
+					}
+				}
+			}
+		}
+	});
+
 	return (
 		<Link
 			href={href}
-			className={classes}
+			// className={css({
+			// 	base: {
+			// 		display: 'inline-flex',
+			// 		alignItems: 'center',
+			// 		px: 1,
+			// 		pt: 1,
+			// 		borderBottomWidth: 2,
+			// 		fontSize: 'sm',
+			// 		fontWeight: 'medium',
+			// 		borderColor: 'transparent',
+			// 	}
+			// })}
+			className={button({
+				variant: 'primary',
+				active: active,
+			})}
 		>
 			{children}
 		</Link>
@@ -42,23 +112,45 @@ export default function Nav(props: {
 	}]
 
 	return (
-		<nav className="bg-white dark:bg-zinc-950 shadow dark:shadow-none">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex justify-between h-16">
-					<div className="flex">
-						<div className="flex-shrink-0 flex items-center">
-							<h1 className="font-mono font-semibold">🍷🍺 Cellar</h1>
-						</div>
-						<div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+		<styled.nav
+			bg={{
+				base: 'white',
+				_osDark: 'zinc.950',
+			}}
+			shadow={{
+				base: 'sm',
+				_osDark: 'none',
+			}}
+		>
+			<styled.div maxW="7xl" mx="auto" px={{
+				base: 4,
+				sm: 6,
+				lg: 8,
+			}}>
+				<styled.div display="flex" h={16} justifyContent="space-between">
+					<styled.div display="flex">
+						<styled.div flexShrink={0} display="flex" alignItems="center">
+							<styled.h1 color={{
+								base: 'gray.900',
+								_osDark: 'zinc.50',
+							}} fontFamily="mono" fontWeight="semibold">🍷🍺 Cellar</styled.h1>
+						</styled.div>
+						<styled.div display={{
+							base: 'none',
+							sm: 'flex',
+						}} sm={{
+							ml: 6,
+							gap: 8,
+						}}>
 							{navItems.map(navItem => {
 								return <NavItem key={navItem.link} href={navItem.link} active={navItem.active}>{navItem.title}</NavItem>
 							})}
-						</div>
-					</div>
+						</styled.div>
+					</styled.div>
 					<div className="hidden sm:ml-6 sm:flex sm:items-center">
 						<AuthMenu />
 					</div>
-					<div className="-mr-2 flex items-center sm:hidden">
+					<styled.div className="-mr-2 flex items-center sm:hidden">
 						<button className="bg-white p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 							<span className="sr-only">Open main menu</span>
 							<svg
@@ -77,9 +169,9 @@ export default function Nav(props: {
 								/>
 							</svg>
 						</button>
-					</div>
-				</div>
-			</div>
+					</styled.div>
+				</styled.div>
+			</styled.div>
 
 			<div className="hidden sm:hidden">
 				<div className="px-2 pt-2 pb-3 space-y-1">
@@ -105,6 +197,6 @@ export default function Nav(props: {
 					</a>
 				</div>
 			</div>
-		</nav>
+		</styled.nav>
 	)
 }

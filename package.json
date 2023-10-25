@@ -7,18 +7,22 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "prepare": "panda codegen"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@prisma/client": "5.4.2",
     "clsx": "^2.0.0",
     "next": "13.5.5",
     "next-auth": "^4.24.3",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^1.14.0"
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animated": "^1.0.1"
   },
   "devDependencies": {
+    "@pandacss/dev": "^0.17.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

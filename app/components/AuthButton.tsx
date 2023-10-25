@@ -2,6 +2,9 @@
 import { cn, useOutsideClick } from "@/lib/utils";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
+import { styled } from "@/styled-system/jsx";
+import { css } from "@/styled-system/css";
+import Button from "./Button";
 
 export default function AuthMenu() {
 	const { data: session } = useSession();
@@ -12,24 +15,43 @@ export default function AuthMenu() {
 
 	if (!session) {
 		return (
-			<div className="flex gap-1">
+			<styled.div display="flex" gap={1}>
 				<p>Not signed in.</p>
-				<button className="dark:text-white bg-slate-600 rounded-sm p-2" onClick={() => signIn()}>Sign in</button>
-			</div>
+				<Button title="Sign in" onClick={() => signIn()} />
+			</styled.div>
 		)
 	} else {
 		return (
-			<div className="ml-3 relative">
+			<styled.div position="relative" ml={3}>
 				<div>
 					<button
-						className="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						// "bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						className={css({
+							bg: 'white',
+							display: 'flex',
+							fontSize: 'sm',
+							rounded: 'full',
+							_focus: {
+								outline: 'none',
+								ring: 2,
+								ringOffset: 2,
+								ringColor: 'indigo.500',
+							},
+						})}
 						id="user-menu"
 						aria-haspopup="true"
 						onClick={() => setMenuOpen(true)}
 					>
-						<span className="sr-only">Open user menu</span>
+						<span className={css({
+							srOnly: true,
+						})}>Open user menu</span>
 						<img
-							className="h-8 w-8 rounded-full"
+							// "h-8 w-8 rounded-full"
+							className={css({
+								h: 8,
+								w: 8,
+								rounded: 'full',
+							})}
 							src={session.user?.image || ""}
 							alt={session.user?.name || ""}
 						/>
@@ -43,30 +65,66 @@ export default function AuthMenu() {
 					aria-orientation="vertical"
 					aria-labelledby="user-menu"
 				>
-					<a
+					<styled.a
 						href="#"
-						className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+						display="block"
+						px={4}
+						py={2}
+						fontSize={"sm"}
+						color={{
+							base: 'gray.700',
+							_osDark: 'gray.300',
+						}}
+						bg={{
+							base: 'gray-200',
+							_osDark: 'gray-800',
+						}}
 						role="menuitem"
 					>
 						Your Profile
-					</a>
+					</styled.a>
 
-					<a
+					<styled.a
 						href="#"
-						className="block px-4 py-2 text-sm text-gray-700  dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+						display="block"
+						px={4}
+						py={2}
+						fontSize={"sm"}
+						color={{
+							base: 'gray.700',
+							_osDark: 'gray.300',
+						}}
+						bg={{
+							base: 'gray-200',
+							_osDark: 'gray-800',
+						}}
 						role="menuitem"
 					>
 						Settings
-					</a>
-					<a
+					</styled.a>
+
+					<styled.a
+						cursor="pointer"
 						onClick={() => signOut()}
-						className="block px-4 py-2 text-sm text-gray-700  dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 hover:cursor-pointer"
+						href="#"
+						display="block"
+						px={4}
+						py={2}
+						fontSize={"sm"}
+						color={{
+							base: 'gray.700',
+							_osDark: 'gray.300',
+						}}
+						bg={{
+							base: 'gray-200',
+							_osDark: 'gray-800',
+						}}
 						role="menuitem"
 					>
 						Sign out
-					</a>
+					</styled.a>
 				</div>
-			</div>
+			</styled.div>
 		)
 	}
 }
