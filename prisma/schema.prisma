@@ -20,7 +20,7 @@ model User {
   ingredients   Ingredient[]
   vessels       Vessel[]
   image         String?
-  emailVerified Boolean      @default(false)
+  emailVerified DateTime?
   accounts      Account[]
   sessions      Session[]
 }
@@ -32,10 +32,10 @@ model Batch {
   userId              String            @db.ObjectId
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
-  initialVolume       Float
+  initialVolume       Float?
   vintage             Int
   startDate           DateTime          @default(now())
-  endDate             DateTime
+  endDate             DateTime?
   additions           Addition[]
   readings            Reading[]
   batchIngredients    BatchIngredient[] @relation(fields: [batchIngredientsIds], references: [id])

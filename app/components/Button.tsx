@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from "react"
-import { css, cx } from "@/styled-system/css";
+import { css, cva, cx } from "@/styled-system/css";
 import { ColorPalette, token } from "@/styled-system/tokens";
 
 declare module 'react' {
@@ -9,13 +9,93 @@ declare module 'react' {
 }
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	title: string
+	title?: string
 	variant?: 'primary' | 'secondary'
 	color?: ColorPalette
+	size?: 'sm' | 'md'
 }
 
 export default function Button(props: ButtonProps) {
-	const { title, variant = 'primary', color = 'green', className } = props;
+	const { title, variant = 'primary', color = 'green', className, size = "md", ...rest } = props;
+
+	const button = cva({
+		base: {
+			display: 'inline-flex',
+			color: 'zinc.800',
+			cursor: 'pointer',
+			bg: 'var(--color-500)',
+			transition: 'all 75ms',
+			shadow: 'sm',
+			fontWeight: 'bold',
+			py: 2,
+			px: 4,
+			borderRadius: 'md',
+			borderWidth: 2,
+			borderBottomWidth: 4,
+			borderRightWidth: 4,
+			borderColor: 'var(--color-400)',
+			borderBottomColor: 'var(--color-700)',
+			borderRightColor: 'var(--color-700)',
+			_osDark: {
+				color: 'zinc.100',
+				bg: 'var(--color-600)',
+				borderColor: 'var(--color-500)',
+				borderBottomColor: 'var(--color-800)',
+				borderRightColor: 'var(--color-800)',
+			},
+			_hover: {
+				color: 'zinc.900',
+				bg: 'var(--color-600)',
+				borderColor: 'var(--color-500)',
+				borderBottomColor: 'var(--color-800)',
+				borderRightColor: 'var(--color-800)',
+				_osDark: {
+					color: 'zinc.100',
+					bg: 'var(--color-700)',
+					borderColor: 'var(--color-600)',
+					borderBottomColor: 'var(--color-900)',
+					borderRightColor: 'var(--color-900)',
+				}
+			},
+			_active: {
+				color: 'black',
+				bg: 'var(--color-800)',
+				borderColor: 'var(--color-700)',
+				borderBottomColor: 'var(--color-900)',
+				borderRightColor: 'var(--color-900)',
+				transform: 'translate(2px, 2px)',
+				borderBottomWidth: 2,
+				borderRightWidth: 2,
+				marginBottom: '2px',
+				marginLeft: '2px',
+				transition: 'margin 0ms',
+				_osDark: {
+					color: 'zinc.100',
+					bg: 'var(--color-900)',
+					borderColor: 'var(--color-700)',
+					borderBottomColor: 'black',
+					borderRightColor: 'black',
+				}
+			},
+		},
+		variants: {
+			size: {
+				sm: {
+					fontSize: 'sm',
+					py: 1,
+					px: 2,
+				},
+				md: {
+					fontSize: 'md',
+					py: 2,
+					px: 4,
+				},
+			}
+		},
+		defaultVariants: {
+			size: 'md',
+		}
+	});
 
 	return (
 		<div className={css({
@@ -27,6 +107,7 @@ export default function Button(props: ButtonProps) {
 				{title}
 			</button> */}
 			<button
+				{...rest}
 				style={{
 					'--color-400': token(`colors.${color}.400`),
 					'--color-500': token(`colors.${color}.500`),
@@ -35,40 +116,8 @@ export default function Button(props: ButtonProps) {
 					'--color-800': token(`colors.${color}.800`),
 					'--color-900': token(`colors.${color}.900`),
 				}}
-				className={cx(css({
-					color: 'zinc.800',
-					bg: 'var(--color-500)',
-					transition: 'all 75ms',
-					shadow: 'sm',
-					fontWeight: 'bold',
-					py: 2,
-					px: 4,
-					borderRadius: 'md',
-					borderWidth: 2,
-					borderBottomWidth: 4,
-					borderRightWidth: 4,
-					borderColor: 'var(--color-400)',
-					borderBottomColor: 'var(--color-700)',
-					borderRightColor: 'var(--color-700)',
-					_hover: {
-						color: 'zinc.900',
-						bg: 'var(--color-600)',
-						borderColor: 'var(--color-500)',
-						borderBottomColor: 'var(--color-800)',
-						borderRightColor: 'var(--color-800)',
-					},
-					_active: {
-						color: 'zinc.50',
-						bg: 'var(--color-800)',
-						borderColor: 'var(--color-700)',
-						borderBottomColor: 'var(--color-900)',
-						borderRightColor: 'var(--color-900)',
-						transform: 'translate(2px, 2px)',
-						borderBottomWidth: 2,
-						borderRightWidth: 2,
-						marginBottom: '2px',
-						transition: 'margin 0ms'
-					},
+				className={cx(button({
+					size,
 				}), className)}>
 				{title}
 			</button>

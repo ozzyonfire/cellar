@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react';
-import Nav from './components/Nav';
-import { Batch } from '@prisma/client';
-import Modal from './components/Modal';
-import Button from './components/Button';
-import { styled } from '@/styled-system/jsx';
 import { css } from '@/styled-system/css';
+import { styled } from '@/styled-system/jsx';
+import { Batch } from '@prisma/client';
+import { useState } from 'react';
+import { createBatch } from './actions';
+import Button from './components/Button';
+import Nav from './components/Nav';
+import NewBatchModal from './components/batches/NewBatchModal';
 
 type BatchManagementPageProps = {
 	batches: Batch[];
@@ -14,14 +15,22 @@ type BatchManagementPageProps = {
 
 const BatchManagementPage: React.FC<BatchManagementPageProps> = ({ batches = [] }) => {
 	const [showModal, setShowModal] = useState(false);
-
 	const handleNewBatchClick = () => {
+		console.log('clicked');
 		setShowModal(true);
 	};
 
 	const handleModalClose = () => {
 		setShowModal(false);
 	};
+
+	const handleCreateBatch = async (formData: FormData) => {
+		console.log('formData', formData)
+		const response = await createBatch(formData);
+		if (response.message) {
+
+		}
+	}
 
 	return (
 		<styled.div bg={{
@@ -77,12 +86,60 @@ const BatchManagementPage: React.FC<BatchManagementPageProps> = ({ batches = [] 
 							))}
 						</div>
 					</div>
-					<Button className={css({
-						colorPalette: 'red',
-					})} title="Hello" />
+					<div className='flex justify-center gap-2'>
+						<Button title="Hello" size="md" />
+						<Button title="Hello" size="md" />
+						<Button title="Hello" size="md" />
+						<Button title="Hello" size="md" />
+					</div>
 				</styled.div>
 			</styled.main>
-			<Modal open={showModal} onClose={handleModalClose} />
+			{/* <div className='max-w-md mx-auto'>
+				<form
+					id="new-batch-form"
+					action={handleCreateBatch}
+				>
+					<div className="grid grid-cols-1 gap-2">
+						<div>
+							<label className="block mb-1 text-sm font-medium" htmlFor="name">Name</label>
+							<input
+								data-lpignore="true"
+								autoComplete='off'
+								type="text"
+								required
+								className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600"
+								id="name"
+								name="name"
+							/>
+						</div>
+						<div>
+							<label className="block mb-1 text-sm font-medium" htmlFor="vintage">Vintage</label>
+							<input
+								data-lpignore="true"
+								autoComplete="off"
+								type="number"
+								required
+								className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600"
+								id="vintage"
+								name="vintage"
+							/>
+						</div>
+					</div>
+					<Button className='mt-2' size="sm" type="submit" title="Save" />
+				</form>
+			</div> */}
+			<NewBatchModal open={showModal} onClose={handleModalClose} />
+			{/* <Button onClick={async () => { */}
+			{/* await testAction();
+				console.log('done on the client');
+			}} title="Test Action" size="md" /> */}
+			{/* <form action={createBatch} className='flex flex-col gap-1 max-w-md mx-auto'>
+				<label htmlFor="name">Name</label>
+				<input autoComplete='off' className="text-black" type="text" name="name" required id="name" />
+				<label htmlFor="vintage">Vintage</label>
+				<input autoComplete='off' className="text-black" type="text" name="vintage" required id="vintage" />
+				<Button size="sm" type="submit" title="Submit" />
+			</form> */}
 		</styled.div>
 	);
 };

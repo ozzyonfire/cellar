@@ -33,11 +33,11 @@ export function NavItem(props: {
 			},
 			_hover: {
 				color: 'gray.700',
+				borderColor: 'gray.300',
 				_osDark: {
 					color: 'gray.100',
 					borderColor: 'gray.700',
 				},
-				borderColor: 'gray.300',
 			}
 		},
 		variants: {
@@ -65,18 +65,6 @@ export function NavItem(props: {
 	return (
 		<Link
 			href={href}
-			// className={css({
-			// 	base: {
-			// 		display: 'inline-flex',
-			// 		alignItems: 'center',
-			// 		px: 1,
-			// 		pt: 1,
-			// 		borderBottomWidth: 2,
-			// 		fontSize: 'sm',
-			// 		fontWeight: 'medium',
-			// 		borderColor: 'transparent',
-			// 	}
-			// })}
 			className={button({
 				active: active,
 			})}
@@ -104,14 +92,7 @@ export default function Nav(props: {
 
 	return (
 		<styled.nav
-			bg={{
-				base: 'white',
-				_osDark: 'zinc.950',
-			}}
-			shadow={{
-				base: 'sm',
-				_osDark: 'none',
-			}}
+			className="bg-white dark:bg-zinc-800 border-b-4 border-gray-200 dark:border-b-black shadow-sm border-t-2 border-t-zinc-600 border-l-2 border-l-zinc-600 border-r-4 dark:border-r-black"
 		>
 			<styled.div maxW="7xl" mx="auto" px={{
 				base: 4,

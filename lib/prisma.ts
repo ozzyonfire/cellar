@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 
 declare global {
-	var prisma: PrismaClient | undefined;
+	var prisma: PrismaClient;
 }
 
-let localPrisma: PrismaClient | undefined;
+let localPrisma: PrismaClient;
 
 if (process.env.NODE_ENV === "production") {
 	localPrisma = new PrismaClient();

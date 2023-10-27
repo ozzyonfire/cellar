@@ -1,5 +1,5 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+@layer panda_reset, panda_base, panda_tokens, panda_recipes, panda_utilities;
 
-@layer reset, base, tokens, recipes, utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

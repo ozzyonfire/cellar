@@ -25,5 +25,13 @@ export default defineConfig({
   // The output directory for your css system
   outdir: "styled-system",
 
-  jsxFramework: "react"
+  jsxFramework: "react",
+
+  layers: {
+    base: "panda_base",
+    recipes: "panda_recipes",
+    utilities: "panda_utilities",
+    reset: "panda_reset",
+    tokens: "panda_tokens",
+  }
 })
