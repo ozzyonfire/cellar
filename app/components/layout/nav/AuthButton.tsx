@@ -1,11 +1,11 @@
 'use client'
-import { useOutsideClick } from "@/lib/utils";
+import { useOutsideClick } from "@/lib/client-utils";
 import { css } from "@/styled-system/css";
 import { styled } from "@/styled-system/jsx";
 import { Transition } from "@headlessui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
-import Button from "./Button";
+import Button from "../../general/Button";
 
 export default function AuthMenu() {
 	const { data: session } = useSession();

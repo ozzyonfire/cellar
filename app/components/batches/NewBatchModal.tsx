@@ -1,5 +1,5 @@
 import { createBatch } from "@/app/actions";
-import Modal from "../Modal"
+import Modal from "../general/Modal"
 
 export default function NewBatchModal(props: {
 	open: boolean,
@@ -23,18 +23,13 @@ export default function NewBatchModal(props: {
 			title="New Batch"
 			actions={[
 				{
-					title: 'Cancel',
-					onClick: onClose,
-				},
-				// {
-				// 	title: 'Save',
-				// 	// onClick: handleModalClose,
-				// 	props: {
-				// 		color: 'orange',
-				// 		type: "submit",
-				// 		form: "new-batch-form",
-				// 	}
-				// }
+					title: 'Save',
+					props: {
+						color: 'orange',
+						type: "submit",
+						form: "new-batch-form",
+					}
+				}
 			]}
 		>
 			<form
@@ -45,6 +40,7 @@ export default function NewBatchModal(props: {
 					<div>
 						<label className="block mb-1 text-sm font-medium" htmlFor="name">Name</label>
 						<input
+							autoFocus
 							autoComplete='off'
 							type="text"
 							required
@@ -64,21 +60,8 @@ export default function NewBatchModal(props: {
 							name="vintage"
 						/>
 					</div>
-					<div>
-						<label className="block mb-1 text-sm font-medium" htmlFor="vessel">Vessel</label>
-						<select
-							autoComplete="off"
-							required
-							className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600"
-							id="vessel"
-							name="vessel"
-						>
-							<option value="barrel">Barrel</option>
-							<option value="tank">Tank</option>
-						</select>
-					</div>
 				</div>
-				<button type="submit">Submit form</button>
+				{/* <button type="submit">Submit form</button> */}
 			</form>
 		</Modal>
 	)

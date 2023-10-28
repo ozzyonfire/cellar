@@ -1,8 +1,11 @@
+'use client';
+
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import AuthMenu from "./AuthButton"
 import { styled } from "@/styled-system/jsx"
 import { css, cva } from "@/styled-system/css"
+import { usePathname } from "next/navigation";
 export function NavItem(props: {
 	children: React.ReactNode
 	href?: string
@@ -18,7 +21,7 @@ export function NavItem(props: {
 
 	const button = cva({
 		base: {
-			transition: 'all 75ms',
+			transition: 'all 100ms',
 			display: 'inline-flex',
 			alignItems: 'center',
 			px: 1,
@@ -28,6 +31,14 @@ export function NavItem(props: {
 			borderColor: 'transparent',
 			borderBottomWidth: 2,
 			color: 'gray.500',
+			_target: {
+				color: 'gray.700',
+				borderColor: 'gray.300',
+				_osDark: {
+					color: 'gray.100',
+					borderColor: 'gray.700',
+				},
+			},
 			_osDark: {
 				color: 'gray.300',
 			},
@@ -77,22 +88,29 @@ export function NavItem(props: {
 export default function Nav(props: {
 	children?: React.ReactNode
 }) {
+	const pathname = usePathname();
 
 	const navItems = [{
 		title: "Dashboard",
-		link: "/dashboard"
+		link: "/dashboard",
+		active: pathname.includes("/dashboard"),
 	}, {
 		title: 'Batches',
 		link: '/batches',
-		active: true
+		active: pathname.includes("/batches"),
 	}, {
 		title: 'Reports',
-		link: '/reports'
-	}]
+		link: '/reports',
+		active: pathname.includes("/reports"),
+	}, {
+		title: 'Vessels',
+		link: '/vessels',
+		active: pathname.includes("/vessels"),
+	}];
 
 	return (
 		<styled.nav
-			className="bg-white dark:bg-zinc-800 border-b-4 border-gray-200 dark:border-b-black shadow-sm border-t-2 border-t-zinc-600 border-l-2 border-l-zinc-600 border-r-4 dark:border-r-black"
+			className="bg-white dark:bg-zinc-800 border-b-4 border-gray-200 dark:border-b-black shadow-sm"
 		>
 			<styled.div maxW="7xl" mx="auto" px={{
 				base: 4,
@@ -113,10 +131,14 @@ export default function Nav(props: {
 						}} sm={{
 							ml: 6,
 							gap: 8,
-						}}>
+						}}
+							position="relative"
+						>
 							{navItems.map(navItem => {
 								return <NavItem key={navItem.link} href={navItem.link} active={navItem.active}>{navItem.title}</NavItem>
 							})}
+							{/* the indicator that moves to the active item */}
+							{/* <div className="absolute inset-x-0 bottom-0 h-1 bg-indigo-500 dark:bg-indigo-300 w-2 left-[100px]" /> */}
 						</styled.div>
 					</styled.div>
 					{/* <div className="hidden sm:ml-6 sm:flex sm:items-center"> */}

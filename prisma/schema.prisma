@@ -42,7 +42,7 @@ model Batch {
   batchIngredientsIds String[]          @db.ObjectId
   rackings            Racking[]
   currentVessel       Vessel?           @relation(fields: [vesselId], references: [id])
-  vesselId            String?           @unique @db.ObjectId
+  vesselId            String?           @db.ObjectId
 }
 
 model BatchIngredient {
@@ -77,7 +77,7 @@ model Addition {
 model Reading {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  Batch       Batch        @relation(fields: [batchId], references: [id])
+  batch       Batch        @relation(fields: [batchId], references: [id])
   batchId     String       @db.ObjectId
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -101,7 +101,7 @@ model Measurment {
   value      Float
   units      MeasurmentUnit
   otherUnits String?
-  Reading    Reading?       @relation(fields: [readingId], references: [id])
+  reading    Reading?       @relation(fields: [readingId], references: [id])
   readingId  String?        @db.ObjectId
 }
 
@@ -126,14 +126,14 @@ model Ingredient {
   id              String            @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   type            String
-  User            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id])
   userId          String            @db.ObjectId
   batchIngredient BatchIngredient[]
 }
 
 model Racking {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  Batch   Batch?   @relation(fields: [batchId], references: [id])
+  batch   Batch?   @relation(fields: [batchId], references: [id])
   batchId String?  @db.ObjectId
   date    DateTime
   notes   String
@@ -144,16 +144,18 @@ model Racking {
 }
 
 model Vessel {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  currentBatch   Batch?
-  currentBatchId String?   @db.ObjectId
-  rackingFrom    Racking[] @relation("fromVessel")
-  rackingTo      Racking[] @relation("toVessel")
-  User           User?     @relation(fields: [userId], references: [id])
-  userId         String?   @db.ObjectId
+  volume         Float?
+  volumeUnit     VolumeUnit?
+  type           String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  currentBatches Batch[]
+  rackingFrom    Racking[]   @relation("fromVessel")
+  rackingTo      Racking[]   @relation("toVessel")
+  user           User?       @relation(fields: [userId], references: [id])
+  userId         String?     @db.ObjectId
 }
 
 /// required fields for Next Auth

@@ -49,13 +49,42 @@ export default function Modal(props: {
 				>
 					<div className="fixed inset-0 overflow-y-auto">
 						<div className="flex min-h-full items-center justify-center p-4 text-center">
-							<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-800 p-6 text-left align-middle shadow-xl">
-								<Dialog.Title
-									as="h3"
-									className="text-lg font-medium leading-6 text-gray-900 dark:text-zinc-50"
-								>
-									{title}
-								</Dialog.Title>
+							<Dialog.Panel className="w-full lg:max-w-xl md:max-w-md sm:max-w-sm transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-800 p-6 text-left align-middle shadow-xl">
+								<div className="flex">
+									<Dialog.Title
+										as="h3"
+										className="text-lg font-medium leading-6 text-gray-900 dark:text-zinc-50"
+									>
+										{title}
+									</Dialog.Title>
+									<div className="flex-grow"></div>
+									{/* add a close icon button */}
+									<button
+										autoFocus={false}
+										type="button"
+										className={cn(
+											'rounded-full p-1',
+											'hover:bg-gray-100 dark:hover:bg-zinc-700'
+										)}
+										onClick={onClose}
+									>
+										<svg
+											className="h-6 w-6 text-gray-500 dark:text-gray-300"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											aria-hidden="true"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M6 18L18 6M6 6l12 12"
+											/>
+										</svg>
+									</button>
+								</div>
 								<div className="my-6 text-gray-500 dark:text-gray-300">
 									{children}
 								</div>
