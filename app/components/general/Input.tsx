@@ -1,14 +1,16 @@
 import { forwardRef } from "react"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	label: string,
+	label?: string,
 }
 
 function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
 	const { label, ...rest } = props;
 	return (
 		<label>
-			<span className="mb-1 text-sm font-medium block">{label}</span>
+			{label &&
+				<span className="mb-1 text-sm font-medium block">{label}</span>
+			}
 			<input
 				{...rest}
 				ref={ref}

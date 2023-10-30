@@ -43,17 +43,65 @@ export async function testAction(formData?: FormData) {
 	}
 }
 
-export async function createVessel(formData: FormData) {
+export async function createVessel(formData: FormData): Promise<{
+	status: 'success' | 'error',
+	message?: string,
+	data?: any,
+}> {
+	const id = formData.get('id') as string;
 	const name = formData.get('name') as string;
 	const type = formData.get('type') as string;
 	const volume = formData.get('volume') as string;
-	const volumeUnit = formData.get('volumeUnit') as VolumeUnit;
+	const volumeUnit = formData.get('units') as VolumeUnit;
 
 	const session = await getServerSession();
 
 	if (!session) {
 		return {
+			status: 'error',
 			message: 'You must be logged in to create a vessel',
+		}
+	}
+
+	if (id) {
+		try {
+
+			const currentVessel = await prisma.vessel.findUnique({
+				where: {
+					id,
+				},
+			});
+
+			if (!currentVessel) {
+				return {
+					status: 'error',
+					message: 'Vessel not found',
+				}
+			}
+
+			const updatedVessel = await prisma.vessel.update({
+				where: {
+					id,
+				},
+				data: {
+					name,
+					type,
+					volume: parseInt(volume),
+					volumeUnit,
+				},
+			});
+
+			revalidatePath('/vessels');
+			return {
+				status: 'success',
+				data: updatedVessel,
+			}
+		} catch (error) {
+			console.error(error);
+			return {
+				status: 'error',
+				message: 'Error updating vessel',
+			}
 		}
 	}
 
@@ -72,9 +120,14 @@ export async function createVessel(formData: FormData) {
 			},
 		});
 		revalidatePath('/vessels');
+		return {
+			status: 'success',
+			data: newVessel,
+		}
 	} catch (error) {
 		console.error(error);
 		return {
+			status: 'error',
 			message: 'Error creating vessel',
 		}
 	}

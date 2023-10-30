@@ -26,10 +26,10 @@ export default function Modal(props: {
 				onClose={onClose} className="relative z-10">
 				{/* Background overlay */}
 				<Transition.Child
-					enter="ease-in-out duration-300"
+					enter="ease-in-out duration-200"
 					enterFrom="backdrop-filter backdrop-blur-none opacity-0"
 					enterTo="backdrop-filter backdrop-blur-sm opacity-100"
-					leave="ease-in duration-300"
+					leave="ease-in duration-200"
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 					className="fixed inset-0"
@@ -39,10 +39,10 @@ export default function Modal(props: {
 
 				{/* Modal panel */}
 				<Transition.Child
-					enter="ease-in-out duration-300"
+					enter="ease-in-out duration-200"
 					enterFrom="opacity-0 scale-50"
 					enterTo="opacity-100 scale-100"
-					leave="ease-in duration-200"
+					leave="ease-in duration-100"
 					leaveFrom="opacity-100 scale-100"
 					leaveTo="opacity-0 scale-50"
 					className="fixed inset-0"

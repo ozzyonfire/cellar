@@ -1,3 +1,5 @@
+import Button from "@/app/components/general/Button";
+import Input from "@/app/components/general/Input";
 import Main from "@/app/components/layout/Main";
 import { getServerSession } from "@/lib/auth";
 
@@ -15,95 +17,59 @@ export default async function BatchPage({
 		where: {
 			id,
 			userId: session?.user.id
+		},
+		include: {
+			batchIngredients: {
+				include: {
+					ingredient: true
+				}
+			}
 		}
 	});
 
 	return (
 		<Main>
-			<h1 className="text-3xl font-extrabold">
-				{batch?.name}
-			</h1>
+			<div className="mb-10">
+				<h1 className="text-3xl font-extrabold">
+					{batch?.name}
+				</h1>
+			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				<form className="space-y-6">
-					<div>
-						<label htmlFor="name" className="block text-sm font-medium text-gray-700">
-							Name
-						</label>
-						<div className="mt-1">
-							<input
-								type="text"
-								name="name"
-								id="name"
-								className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-							/>
-						</div>
+				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4">
+					<h2 className="text-lg font-semibold top-[-1rem] absolute bg-zinc-100 dark:bg-zinc-900 px-1">General</h2>
+					<form className="flex flex-col gap-2">
+						<Input
+							name="name"
+							label="Name"
+							defaultValue={batch?.name}
+							required
+						/>
+						<Input
+							type="date"
+							name="startDate"
+							label="Start Date"
+							defaultValue={batch?.startDate?.toISOString().split('T')[0]}
+							required
+						/>
+					</form>
+					<div className="flex justify-between mt-4 items-center">
+						<h3 className="text-md">Ingredients</h3>
+						<Button
+							color="orange"
+							size="sm"
+							title="Add"
+							flat
+						/>
 					</div>
-
-					<div>
-						<label htmlFor="initialVolume" className="block text-sm font-medium text-gray-700">
-							Initial Volume
-						</label>
-						<div className="mt-1">
-							<input
-								type="number"
-								name="initialVolume"
-								id="initialVolume"
-								className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-							/>
-						</div>
+					<div className="flex flex-col gap-2">
+						{batch?.batchIngredients.map((ingredient) => (
+							<div className="flex flex-row justify-between" key={ingredient.id}>
+								<p className="text-sm">{ingredient.id}</p>
+								<p className="text-sm">{ingredient.volume} {ingredient.volumeUnit}</p>
+							</div>
+						))}
 					</div>
-
-					<div>
-						<label htmlFor="vintage" className="block text-sm font-medium text-gray-700">
-							Vintage
-						</label>
-						<div className="mt-1">
-							<input
-								type="number"
-								name="vintage"
-								id="vintage"
-								className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-							/>
-						</div>
-					</div>
-
-					<div>
-						<label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
-							Start Date
-						</label>
-						<div className="mt-1">
-							<input
-								type="date"
-								name="startDate"
-								id="startDate"
-								className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-							/>
-						</div>
-					</div>
-
-					<div>
-						<label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
-							End Date
-						</label>
-						<div className="mt-1">
-							<input
-								type="date"
-								name="endDate"
-								id="endDate"
-								className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-							/>
-						</div>
-					</div>
-
-					<div className="flex justify-end">
-						<button
-							type="submit"
-							className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-						>
-							Submit
-						</button>
-					</div>
-				</form>
+				</div>
 			</div>
 		</Main>
 	)

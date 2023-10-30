@@ -47,7 +47,7 @@ model Batch {
 
 model BatchIngredient {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  Ingredient   Ingredient  @relation(fields: [ingredientId], references: [id])
+  ingredient   Ingredient  @relation(fields: [ingredientId], references: [id])
   ingredientId String      @db.ObjectId
   volume       Float?
   volumeUnit   VolumeUnit?
@@ -110,7 +110,6 @@ enum VolumeUnit {
   liter
   barrel
   bin
-  other
 }
 
 enum WeightUnit {
@@ -119,7 +118,6 @@ enum WeightUnit {
   gram
   kilogram
   tonne
-  other
 }
 
 model Ingredient {
@@ -144,18 +142,18 @@ model Racking {
 }
 
 model Vessel {
-  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  volume         Float?
-  volumeUnit     VolumeUnit?
+  volume         Float
+  volumeUnit     VolumeUnit @default(liter)
   type           String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   currentBatches Batch[]
-  rackingFrom    Racking[]   @relation("fromVessel")
-  rackingTo      Racking[]   @relation("toVessel")
-  user           User?       @relation(fields: [userId], references: [id])
-  userId         String?     @db.ObjectId
+  rackingFrom    Racking[]  @relation("fromVessel")
+  rackingTo      Racking[]  @relation("toVessel")
+  user           User?      @relation(fields: [userId], references: [id])
+  userId         String?    @db.ObjectId
 }
 
 /// required fields for Next Auth

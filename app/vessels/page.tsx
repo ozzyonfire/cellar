@@ -2,6 +2,7 @@ import { getServerSession } from "@/lib/auth";
 import Main from "@/app/components/layout/Main";
 import Button from "../components/general/Button";
 import VesselsMain from "./main";
+import VesselCard from "../components/vessel/VesselCard";
 
 export default async function VesselsPage() {
 	const session = await getServerSession();
@@ -14,26 +15,9 @@ export default async function VesselsPage() {
 	return (
 		<Main>
 			<VesselsMain />
-			<div className="flex flex-col">
+			<div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 my-4">
 				{vessels.map((vessel) => (
-					<div className="flex flex-row justify-between" key={vessel.id}>
-						<div className="flex flex-col">
-							<h2 className="text-xl font-bold">
-								{vessel.name}
-							</h2>
-							<p className="text-sm">
-								{vessel.type}
-							</p>
-						</div>
-						<div className="flex flex-row">
-							<Button color="emerald" title="Edit Vessel">
-								Edit
-							</Button>
-							<Button color="red" title="Delete Vessel">
-								Delete
-							</Button>
-						</div>
-					</div>
+					<VesselCard vessel={vessel} key={vessel.id} />
 				))}
 			</div>
 		</Main>

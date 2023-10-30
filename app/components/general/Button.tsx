@@ -12,11 +12,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	title?: string
 	variant?: 'primary' | 'secondary'
 	color?: ColorPalette
-	size?: 'sm' | 'md'
+	size?: 'sm' | 'md';
+	flat?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
-	const { title, variant = 'primary', color = 'green', className, size = "md", ...rest } = props;
+	const { title, variant = 'primary', color = 'green', className, size = "md", flat = false, ...rest } = props;
 
 	const button = cva({
 		base: {
@@ -90,6 +91,32 @@ export default function Button(props: ButtonProps) {
 					py: 2,
 					px: 4,
 				},
+			},
+			flat: {
+				true: {
+					bg: 'transparent',
+					borderColor: 'transparent',
+					borderBottomColor: 'transparent',
+					borderRightColor: 'transparent',
+					border: 0,
+					_hover: {
+						bg: 'transparent',
+						borderColor: 'transparent',
+						borderBottomColor: 'transparent',
+						borderRightColor: 'transparent',
+						border: 0,
+					},
+					_active: {
+						bg: 'transparent',
+						borderColor: 'transparent',
+						borderBottomColor: 'transparent',
+						borderRightColor: 'transparent',
+						border: 0,
+						transform: 'none',
+						mb: 0,
+						ml: 0,
+					}
+				}
 			}
 		},
 		defaultVariants: {
@@ -118,6 +145,7 @@ export default function Button(props: ButtonProps) {
 				}}
 				className={cx(button({
 					size,
+					flat
 				}), className)}>
 				{title}
 			</button>
