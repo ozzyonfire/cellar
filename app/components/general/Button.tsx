@@ -22,6 +22,7 @@ export default function Button(props: ButtonProps) {
 	const button = cva({
 		base: {
 			display: 'inline-flex',
+			alignItems: 'center',
 			color: 'zinc.800',
 			cursor: 'pointer',
 			bg: 'var(--color-500)',

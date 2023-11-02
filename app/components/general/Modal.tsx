@@ -3,16 +3,18 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from "react";
 import Button, { ButtonProps } from "./Button";
 
+export interface ModalAction {
+	title: string
+	onClick?: () => void
+	props?: ButtonProps
+}
+
 export default function Modal(props: {
 	open: boolean
 	onClose: () => void
 	title?: string
 	children?: React.ReactNode
-	actions?: {
-		title: string
-		onClick?: () => void
-		props?: ButtonProps
-	}[]
+	actions?: ModalAction[]
 }) {
 	const { open, onClose, actions, children, title } = props;
 
@@ -64,7 +66,7 @@ export default function Modal(props: {
 										type="button"
 										className={cn(
 											'rounded-full p-1',
-											'hover:bg-gray-100 dark:hover:bg-zinc-700'
+											'hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer'
 										)}
 										onClick={onClose}
 									>

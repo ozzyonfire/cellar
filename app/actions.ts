@@ -2,8 +2,8 @@
 
 import { getServerSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { VolumeUnit } from '@prisma/client';
-import { revalidatePath } from 'next/cache';
+import { VolumeUnit, WeightUnit } from '@prisma/client';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function createBatch(formData: FormData) {
@@ -129,6 +129,101 @@ export async function createVessel(formData: FormData): Promise<{
 		return {
 			status: 'error',
 			message: 'Error creating vessel',
+		}
+	}
+}
+
+export async function createIngredient(formData: FormData) {
+	const name = formData.get('name') as string;
+	const type = formData.get('type') as string;
+	const session = await getServerSession();
+
+	if (!session) {
+		return {
+			status: 'error',
+			message: 'You must be logged in to create an ingredient',
+		}
+	}
+
+	try {
+		const newIngredient = await prisma.ingredient.create({
+			data: {
+				name,
+				type,
+				user: {
+					connect: {
+						id: session.user.id,
+					}
+				},
+			},
+		});
+
+		revalidatePath('/batches');
+		revalidatePath('/batches/[id]', 'page');
+		return {
+			status: 'success',
+			data: newIngredient,
+		}
+	} catch (error) {
+		console.error(error);
+		return {
+			status: 'error',
+			message: 'Error creating ingredient',
+		}
+	}
+}
+
+export async function createBatchIngredient(formData: FormData) {
+	const ingredientId = formData.get('ingredient') as string;
+	const batchId = formData.get('batchId') as string;
+	const volume = formData.get('volume') as string;
+	const volumeUnit = formData.get('volumeUnit') as VolumeUnit;
+	const weight = formData.get('weight') as string;
+	const weightUnit = formData.get('weightUnit') as WeightUnit;
+	const date = formData.get('date') as string;
+	const notes = formData.get('notes') as string;
+	const session = await getServerSession();
+
+	if (!session) {
+		return {
+			status: 'error',
+			message: 'You must be logged in to create a batch ingredient',
+		}
+	}
+
+	try {
+
+		const newBatchIngredient = await prisma.batchIngredient.create({
+			data: {
+				ingredient: {
+					connect: {
+						id: ingredientId,
+					}
+				},
+				batch: {
+					connect: {
+						id: batchId,
+					}
+				},
+				volume: parseInt(volume),
+				volumeUnit,
+				weight: parseInt(weight),
+				weightUnit,
+				date: new Date(date),
+				notes,
+			},
+		});
+
+		revalidatePath('/batches/[id]', 'page');
+		return {
+			status: 'success',
+			data: newBatchIngredient,
+		}
+	} catch (error) {
+		console.error(error);
+		return {
+			status: 'error',
+			message: 'Error creating batch ingredient',
 		}
 	}
 }

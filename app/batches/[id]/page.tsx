@@ -1,7 +1,11 @@
+import AddIngredientList from "@/app/components/batches/AddIngredientList";
 import Button from "@/app/components/general/Button";
 import Input from "@/app/components/general/Input";
+import Select from "@/app/components/general/Select";
 import Main from "@/app/components/layout/Main";
 import { getServerSession } from "@/lib/auth";
+import { VolumeUnit } from "@prisma/client";
+import Link from "next/link";
 
 export default async function BatchPage({
 	params,
@@ -12,6 +16,12 @@ export default async function BatchPage({
 }) {
 	const id = searchParams.id as string;
 	const session = await getServerSession();
+
+	const ingredients = await prisma.ingredient.findMany({
+		where: {
+			userId: session?.user.id
+		}
+	});
 
 	const batch = await prisma.batch.findFirst({
 		where: {
@@ -27,6 +37,19 @@ export default async function BatchPage({
 		}
 	});
 
+	if (!batch) {
+		return (
+			<Main>
+				<div className="flex flex-col items-center justify-center h-full">
+					<h1 className="text-3xl font-extrabold mb-4">Batch not found</h1>
+					<Link href="/batches">
+						<Button color="emerald" title="Go Back" />
+					</Link>
+				</div>
+			</Main>
+		)
+	}
+
 	return (
 		<Main>
 			<div className="mb-10">
@@ -34,10 +57,10 @@ export default async function BatchPage({
 					{batch?.name}
 				</h1>
 			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
+				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4 col-span-2">
 					<h2 className="text-lg font-semibold top-[-1rem] absolute bg-zinc-100 dark:bg-zinc-900 px-1">General</h2>
-					<form className="flex flex-col gap-2">
+					<form className="grid grid-cols-2 gap-2">
 						<Input
 							name="name"
 							label="Name"
@@ -51,24 +74,59 @@ export default async function BatchPage({
 							defaultValue={batch?.startDate?.toISOString().split('T')[0]}
 							required
 						/>
-					</form>
-					<div className="flex justify-between mt-4 items-center">
-						<h3 className="text-md">Ingredients</h3>
-						<Button
-							color="orange"
-							size="sm"
-							title="Add"
-							flat
+						<Input
+							type="number"
+							name="initalVolume"
+							label="Initial Volume"
+							defaultValue={batch?.initialVolume?.toString()}
 						/>
+						<Select
+							name="initialVolumeUnit"
+							label="Initial Volume Unit"
+							options={Object.keys(VolumeUnit).map((unit) => ({
+								label: unit,
+								value: unit,
+							}))}
+							defaultValue={batch?.initialVolumeUnit || ''}
+						/>
+					</form>
+					<AddIngredientList
+						batchIngredients={batch.batchIngredients}
+						ingredients={ingredients}
+						batchId={batch.id}
+					/>
+				</div>
+				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4 col-span-4">
+					<h2 className="text-lg font-semibold top-[-1rem] absolute bg-zinc-100 dark:bg-zinc-900 px-1">Current Info</h2>
+					{/* Current volume */}
+					{/* Current vessel */}
+					{/* Last reading */}
+					{/* Last racking */}
+					{/* Last addition */}
+					{/* Maybe a chart or something here */}
+				</div>
+				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4 col-span-3">
+					<h2 className="text-lg font-semibold top-[-1rem] absolute bg-zinc-100 dark:bg-zinc-900 px-1">Readings</h2>
+					{/* List all the readings and their measurements here */}
+					<div className="flex justify-end gap-2">
+						<Link href={`/batches/${batch.id}/new-reading`}>
+							<Button
+								size="sm"
+								title="New Reading"
+								color="emerald"
+								className="mt-2"
+							/>
+						</Link>
 					</div>
-					<div className="flex flex-col gap-2">
-						{batch?.batchIngredients.map((ingredient) => (
-							<div className="flex flex-row justify-between" key={ingredient.id}>
-								<p className="text-sm">{ingredient.id}</p>
-								<p className="text-sm">{ingredient.volume} {ingredient.volumeUnit}</p>
-							</div>
-						))}
-					</div>
+				</div>
+				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4 col-span-3">
+					<h2 className="text-lg font-semibold top-[-1rem] absolute bg-zinc-100 dark:bg-zinc-900 px-1">Additions</h2>
+					{/* Current volume */}
+					{/* Current vessel */}
+					{/* Last reading */}
+					{/* Last racking */}
+					{/* Last addition */}
+					{/* Maybe a chart or something here */}
 				</div>
 			</div>
 		</Main>
