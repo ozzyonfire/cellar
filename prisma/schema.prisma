@@ -75,34 +75,45 @@ model Addition {
 }
 
 model Reading {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  batch       Batch        @relation(fields: [batchId], references: [id])
-  batchId     String       @db.ObjectId
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  measurments Measurment[]
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  batch       Batch               @relation(fields: [batchId], references: [id])
+  batchId     String              @db.ObjectId
   date        DateTime
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  temperature TemperatureReading?
+  gravity     GravityReading?
+  pH          Float?
+  ta          Float?
   notes       String?
+  measurments Measurement[]
 }
 
-enum MeasurmentUnit {
+type TemperatureReading {
+  value Float
+  units TemperatureUnit
+}
+
+enum TemperatureUnit {
   degreesCelcius
   degreesFahrenheit
-  specificGravity
-  brix
-  pH
-  ta
-  so2
-  other
 }
 
-model Measurment {
-  id         String         @id @default(auto()) @map("_id") @db.ObjectId
-  value      Float
-  units      MeasurmentUnit
-  otherUnits String?
-  reading    Reading?       @relation(fields: [readingId], references: [id])
-  readingId  String?        @db.ObjectId
+type GravityReading {
+  value Float
+  units GravityUnit
+}
+
+enum GravityUnit {
+  specificGravity
+  brix
+  kgPerMeterCubed
+}
+
+type Measurement {
+  label String
+  value Float
+  units String
 }
 
 enum VolumeUnit {

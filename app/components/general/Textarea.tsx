@@ -15,7 +15,7 @@ function Textarea(props: TextareaProps, ref: React.Ref<HTMLTextAreaElement>) {
 				{...rest}
 				ref={ref}
 				autoComplete='off'
-				className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600"
+				className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600 focus:outline-none"
 			/>
 		</label>
 	)

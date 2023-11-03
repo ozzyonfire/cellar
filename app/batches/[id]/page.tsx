@@ -5,6 +5,7 @@ import Select from "@/app/components/general/Select";
 import Main from "@/app/components/layout/Main";
 import { getServerSession } from "@/lib/auth";
 import { VolumeUnit } from "@prisma/client";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
 
 export default async function BatchPage({
@@ -33,7 +34,8 @@ export default async function BatchPage({
 				include: {
 					ingredient: true
 				}
-			}
+			},
+			readings: true
 		}
 	});
 
@@ -117,6 +119,23 @@ export default async function BatchPage({
 								className="mt-2"
 							/>
 						</Link>
+					</div>
+					<div className="flex flex-col gap-2 mt-3">
+						{batch.readings.map((reading) => (
+							<div className="flex flex-row justify-between" key={reading.id}>
+								<div className="flex flex-col gap-2">
+									<h3 className="text-lg font-semibold">{reading.date.toLocaleDateString()}</h3>
+									<p>{reading.notes}</p>
+								</div>
+								<div>
+									<Link href={`/batches/${batch.id}/readings/${reading.id}`}>
+										<span className="text-sm text-emerald-500 hover:text-emerald-400">
+											<Pencil />
+										</span>
+									</Link>
+								</div>
+							</div>
+						))}
 					</div>
 				</div>
 				<div className="relative outline-1 outline outline-zinc-500 rounded-xl p-4 col-span-3">

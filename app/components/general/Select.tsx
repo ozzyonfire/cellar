@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { forwardRef } from "react"
 
 interface SelectProps extends React.InputHTMLAttributes<HTMLSelectElement> {
@@ -11,6 +12,7 @@ interface SelectProps extends React.InputHTMLAttributes<HTMLSelectElement> {
 
 function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
 	const { label, options, labelProps, ...rest } = props;
+	const { className, ...selectProps } = rest;
 	return (
 		<label {...labelProps}>
 			<span className="mb-1 text-sm font-medium block">{label}</span>
@@ -18,8 +20,8 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
 				<select
 					ref={ref}
 					autoComplete='off'
-					className="w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600 pr-2 appearance-none"
-					{...rest}
+					className={cn("w-full rounded-lg focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2.5 bg-white dark:bg-zinc-700 dark:text-zinc-50 dark:border-zinc-600 pr-2 appearance-none", className)}
+					{...selectProps}
 				>
 					{options.map((option) => (
 						<option value={option.value} key={option.value}>

@@ -2,7 +2,7 @@
 
 import { getServerSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { VolumeUnit, WeightUnit } from '@prisma/client';
+import { GravityUnit, TemperatureUnit, VolumeUnit, WeightUnit } from '@prisma/client';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -226,4 +226,58 @@ export async function createBatchIngredient(formData: FormData) {
 			message: 'Error creating batch ingredient',
 		}
 	}
+}
+
+export async function saveReading(formData: FormData) {
+	const readingId = formData.get('id') as string;
+	const date = formData.get('date') as string;
+	const notes = formData.get('notes') as string;
+	const pH = formData.get('pH') as string;
+	const temperature = formData.get('temperature') as string;
+	const tempUnits = formData.get('temperatureUnit') as TemperatureUnit;
+	const gravity = formData.get('gravity') as string;
+	const gravityUnits = formData.get('gravityUnit') as GravityUnit;
+	const ta = formData.get('ta') as string;
+
+	const tempValue = parseFloat(temperature);
+	const gravityValue = parseFloat(gravity);
+
+	console.log(formData);
+
+	const update = await prisma.reading.update({
+		where: {
+			id: readingId,
+		},
+		data: {
+			notes,
+			date: new Date(date),
+			pH: parseFloat(pH),
+			ta: parseFloat(ta),
+			temperature: isNaN(tempValue) ? undefined : {
+				value: tempValue,
+				units: tempUnits,
+			},
+			gravity: isNaN(gravityValue) ? undefined : {
+				value: gravityValue,
+				units: gravityUnits,
+			}
+		},
+	});
+
+	console.log(update);
+
+	revalidatePath('/batches/[id]/readings/[readingId]', 'page');
+	return {
+		status: 'success',
+	}
+}
+
+export async function deleteReading(readingId: string, batchId: string) {
+	await prisma.reading.delete({
+		where: {
+			id: readingId,
+		},
+	});
+
+	redirect(`/batches/${batchId}`);
 }
